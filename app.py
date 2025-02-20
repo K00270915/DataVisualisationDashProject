@@ -60,25 +60,28 @@ app.layout = dbc.Container([
     html.H2("Data Visualisation Project: An Analysis on Coffee Quality", className="mt-4 mb-4 text-center"),
 ################################### My Code ###################################
 
-dcc.Tabs(id="tabs-example", children=[
+    dcc.Tabs(id="tabs-example", children=[
 
-    # TAB 1: Species of Coffee Used Throughout The Years
-    dcc.Tab(label="Species of Coffee Used Throughout The Years"), children=[
-        html.Br(),
-        html.P("Here is a visualisation on the usage of Arabica and Robusta throughout the years. Do
-               notice anything?")
-        dcc.Slider(
-            id="year-slider",
-            min=min(years),
-            max=max(years),
-            step=1,
-            value=2011
-            marks={str(year): str(year) for year in years},
-        )
-        dcc.Graph(id="speciesPYMap", style={"height": "600px"}),
-        html.Br(),
-    ]
-])
+        # TAB 1: Species of Coffee Used Throughout The Years
+        dcc.Tab(label="Species of Coffee Used Throughout The Years", children=[
+            html.Br(),
+            html.P("Here is a visualisation on the usage of Arabica and Robusta throughout the years. Do notice anything?"),
+            
+            dcc.Slider(
+                id="year-slider",
+                min=min(years),
+                max=max(years),
+                step=1,
+                value=2011,
+                marks={str(year): str(year) for year in years},
+            ),
+
+            dcc.Graph(id="speciesPYMap", style={"height": "600px"}),
+
+            html.Br(),
+        ])
+    ])
+
 
 
 ################################### END OF ###################################
