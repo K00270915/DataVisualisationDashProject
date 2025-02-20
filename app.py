@@ -65,7 +65,7 @@ dcc.Tabs(id="tabs-example", children=[
     # TAB 1: Species of Coffee Used Throughout The Years
     dcc.Tab(label="Species of Coffee Used Throughout The Years"), children=[
         html.Br(),
-        html.P("Here is a visualisation on the usage of 'Arabica' and 'Robusta' throughout the years. Do
+        html.P("Here is a visualisation on the usage of Arabica and Robusta throughout the years. Do
                notice anything?")
         dcc.Slider(
             id="year-slider",
