@@ -5,15 +5,10 @@ import pandas as pd
 import plotly.express as px
 
 # -----------------------------------------------------------
-# 1) Load and Process Data (Using Gapminder)
+# 1) Loading My Data
 # -----------------------------------------------------------
-gapminder = px.data.gapminder()
 
-# Unique years for the slider
-years = sorted(gapminder["year"].unique())
-
-# Unique continents for the dropdown filter
-continents = sorted(gapminder["continent"].unique())
+df = pd.read_csv("data/Coffee_Qlty.csv")
 
 # -----------------------------------------------------------
 # 2) Create Dash App with Bootstrap Styling
@@ -25,11 +20,12 @@ server = app.server  # Expose Flask app for deployment
 # 3) Layout and Components
 # -----------------------------------------------------------
 app.layout = dbc.Container([
-    html.H2("Global Economic and Health Insights (Gapminder)", className="mt-4 mb-4 text-center"),
+    html.H2("Data Visualisation Project: An Analysis on Coffee Quality", className="mt-4 mb-4 text-center"),
 
-    dcc.Tabs(id="tabs-example", children=[
+#       James's code
+"""    dcc.Tabs(id="tabs-example", children=[
 
-        # ------ Tab 1: Choropleth ------
+         # ------ Tab 1: Choropleth ------
         dcc.Tab(label="Global Life Expectancy (Choropleth Map)", children=[
             html.Br(),
             html.P("Explore global life expectancy by selecting a year."),
@@ -68,13 +64,17 @@ app.layout = dbc.Container([
             dcc.Graph(id="animated-gdp"),
         ]),
     ]),
-], fluid=True)
+], fluid=True) """
+
+#       My Code
+
 
 # -----------------------------------------------------------
 # 4) Callbacks for Interactivity
 # -----------------------------------------------------------
 
-# Callback: Update Choropleth Map based on Year Selection
+#       James's Callbacks
+""" # Callback: Update Choropleth Map based on Year Selection
 @app.callback(
     Output("choropleth-map", "figure"),
     Input("year-slider", "value")
@@ -141,7 +141,7 @@ def update_animated_chart(tab):
         # Extend lifeExp axis to 100
         range_y=[0, 100]
     )
-    return fig
+    return fig """
 
 # -----------------------------------------------------------
 # 5) Run Server
