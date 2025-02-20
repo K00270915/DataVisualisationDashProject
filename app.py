@@ -64,8 +64,8 @@ app.layout = dbc.Container([
             dcc.Graph(id="animated-gdp"),
         ]),
     ]),
-], fluid=True) """
-
+ """
+], fluid=True)
 #       My Code
 
 
