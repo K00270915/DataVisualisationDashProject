@@ -5,10 +5,47 @@ import pandas as pd
 import plotly.express as px
 
 # -----------------------------------------------------------
-# 1) Loading My Data
+# 1) Loading and Processing My Data
 # -----------------------------------------------------------
 
 df = pd.read_csv("data/Coffee_Qlty.csv")
+
+# df.info was done to observe the number of Null values. this was the result:
+# #   Column                Non-Null Count  Dtype  
+# ---  ------                --------------  -----  
+#  0   REC_ID                1339 non-null   int64  
+#  1   Species               1339 non-null   object 
+#  2   Continent.of.Origin   1338 non-null   object 
+#  3   Country.of.Origin     1338 non-null   object 
+#  4   Harvest.Year          1279 non-null   float64
+#  5   Expiration            1339 non-null   object 
+#  6   Variety               1113 non-null   object 
+#  7   Color                 1069 non-null   object 
+#  8   Processing.Method     1169 non-null   object 
+#  9   Aroma                 1339 non-null   float64
+#  10  Flavor                1339 non-null   float64
+#  11  Aftertaste            1339 non-null   float64
+#  12  Acidity               1339 non-null   float64
+#  13  Body                  1339 non-null   float64
+#  14  Balance               1339 non-null   float64
+#  15  Uniformity            1339 non-null   float64
+#  16  Clean.Cup             1339 non-null   float64
+#  17  Sweetness             1339 non-null   float64
+#  18  Moisture              1339 non-null   float64
+#  19  Quakers               1339 non-null   int64  
+#  20  Category.One.Defects  1339 non-null   int64  
+#  21  Category.Two.Defects  1339 non-null   int64  
+# dtypes: float64(11), int64(4), object(7)
+
+# Because of this, dropna() was used to get rid of all na values bringing the total varying amount of non 
+# empty rows to a consistent amount of  946 non-null rows
+
+df = df.dropna(axis=0, how='any')
+
+species = sorted(df["Species"].unique())
+continent = sorted(df["Continent.of.Origin"].unique())
+country = sorted(df["Country.of.Origin"].unique())
+years = sorted(int(year) for year in df["Harvest.Year"].unique())
 
 # -----------------------------------------------------------
 # 2) Create Dash App with Bootstrap Styling
@@ -21,7 +58,30 @@ server = app.server  # Expose Flask app for deployment
 # -----------------------------------------------------------
 app.layout = dbc.Container([
     html.H2("Data Visualisation Project: An Analysis on Coffee Quality", className="mt-4 mb-4 text-center"),
+################################### My Code ###################################
 
+dcc.Tabs(id="tabs-example", children=[
+
+    # TAB 1: Species of Coffee Used Throughout The Years
+    dcc.Tab(label="Species of Coffee Used Throughout The Years"), children=[
+        html.Br(),
+        html.P("Here is a visualisation on the usage of 'Arabica' and 'Robusta' throughout the years. Do
+               notice anything?")
+        dcc.Slider(
+            id="year-slider",
+            min=min(years),
+            max=max(years),
+            step=1,
+            value=2011
+            marks={str(year): str(year) for year in years},
+        )
+        dcc.Graph(id="speciesPYMap", style={"height": "600px"}),
+        html.Br(),
+    ]
+])
+
+
+################################### END OF ###################################
 ################################### JAMES'S CODE ###################################
 #    dcc.Tabs(id="tabs-example", children=[
 
@@ -65,7 +125,7 @@ app.layout = dbc.Container([
 #         ]),
 #     ]),
 ################################### END OF ###################################
-################################### My Code ###################################
+
 
 ], fluid=True)
 
@@ -75,76 +135,76 @@ app.layout = dbc.Container([
 # 4) Callbacks for Interactivity
 # -----------------------------------------------------------
 
-#       James's Callbacks
-""" # Callback: Update Choropleth Map based on Year Selection
-@app.callback(
-    Output("choropleth-map", "figure"),
-    Input("year-slider", "value")
-)
-def update_choropleth(selected_year):
-    df_filtered = gapminder[gapminder["year"] == selected_year]
-    fig = px.choropleth(
-        df_filtered,
-        locations="iso_alpha",
-        color="lifeExp",
-        hover_name="country",
-        color_continuous_scale=px.colors.sequential.Plasma,
-        projection="orthographic",
-        title=f"Life Expectancy by Country ({selected_year})",
-        # Set the range from 0 to 90 so the color scale remains constant
-        range_color=[0, 90]
-    )
-    return fig
+################################### JAMES'S CALLBACKS ###################################
+# # Callback: Update Choropleth Map based on Year Selection
+# @app.callback(
+#     Output("choropleth-map", "figure"),
+#     Input("year-slider", "value")
+# )
+# def update_choropleth(selected_year):
+#     df_filtered = gapminder[gapminder["year"] == selected_year]
+#     fig = px.choropleth(
+#         df_filtered,
+#         locations="iso_alpha",
+#         color="lifeExp",
+#         hover_name="country",
+#         color_continuous_scale=px.colors.sequential.Plasma,
+#         projection="orthographic",
+#         title=f"Life Expectancy by Country ({selected_year})",
+#         # Set the range from 0 to 90 so the color scale remains constant
+#         range_color=[0, 90]
+#     )
+#     return fig
 
 
-# Callback: Update Line Chart & Bar Chart based on Continent Selection
-@app.callback(
-    [Output("life-expectancy-line", "figure"),
-     Output("gdp-bar-chart", "figure")],
-    Input("continent-dropdown", "value")
-)
-def update_charts(selected_continent):
-    # Line Chart: Life Expectancy Trends
-    df_continent = gapminder[gapminder["continent"] == selected_continent]
-    df_life = df_continent.groupby("year", as_index=False)["lifeExp"].mean()
-    fig_life = px.line(
-        df_life,
-        x="year", y="lifeExp",
-        title=f"Avg Life Expectancy in {selected_continent} Over Time"
-    )
+# # Callback: Update Line Chart & Bar Chart based on Continent Selection
+# @app.callback(
+#     [Output("life-expectancy-line", "figure"),
+#      Output("gdp-bar-chart", "figure")],
+#     Input("continent-dropdown", "value")
+# )
+# def update_charts(selected_continent):
+#     # Line Chart: Life Expectancy Trends
+#     df_continent = gapminder[gapminder["continent"] == selected_continent]
+#     df_life = df_continent.groupby("year", as_index=False)["lifeExp"].mean()
+#     fig_life = px.line(
+#         df_life,
+#         x="year", y="lifeExp",
+#         title=f"Avg Life Expectancy in {selected_continent} Over Time"
+#     )
 
-    # Bar Chart: Avg GDP per Country (Latest Year in Dataset)
-    df_gdp = df_continent[df_continent["year"] == 2007]
-    fig_gdp = px.bar(
-        df_gdp,
-        x="country", y="gdpPercap",
-        title=f"GDP Per Capita by Country ({selected_continent}, 2007)"
-    )
+#     # Bar Chart: Avg GDP per Country (Latest Year in Dataset)
+#     df_gdp = df_continent[df_continent["year"] == 2007]
+#     fig_gdp = px.bar(
+#         df_gdp,
+#         x="country", y="gdpPercap",
+#         title=f"GDP Per Capita by Country ({selected_continent}, 2007)"
+#     )
 
-    return fig_life, fig_gdp
+#     return fig_life, fig_gdp
 
 
-# Callback: Animated Scatter Plot for GDP Growth
-@app.callback(
-    Output("animated-gdp", "figure"),
-    Input("tabs-example", "value")
-)
-def update_animated_chart(tab):
-    fig = px.scatter(
-        gapminder,
-        x="gdpPercap", y="lifeExp",
-        size="pop", color="continent",
-        hover_name="country",
-        animation_frame="year",
-        animation_group="country",
-        log_x=True,
-        size_max=55,
-        title="GDP per Capita vs. Life Expectancy Over Time",
-        # Extend lifeExp axis to 100
-        range_y=[0, 100]
-    )
-    return fig """
-
+# # Callback: Animated Scatter Plot for GDP Growth
+# @app.callback(
+#     Output("animated-gdp", "figure"),
+#     Input("tabs-example", "value")
+# )
+# def update_animated_chart(tab):
+#     fig = px.scatter(
+#         gapminder,
+#         x="gdpPercap", y="lifeExp",
+#         size="pop", color="continent",
+#         hover_name="country",
+#         animation_frame="year",
+#         animation_group="country",
+#         log_x=True,
+#         size_max=55,
+#         title="GDP per Capita vs. Life Expectancy Over Time",
+#         # Extend lifeExp axis to 100
+#         range_y=[0, 100]
+#     )
+#     return fig
+################################### END OF ###################################
 # -----------------------------------------------------------
 # 5) Run Server
 # -----------------------------------------------------------
