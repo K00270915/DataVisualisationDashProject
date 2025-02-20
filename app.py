@@ -22,51 +22,53 @@ server = app.server  # Expose Flask app for deployment
 app.layout = dbc.Container([
     html.H2("Data Visualisation Project: An Analysis on Coffee Quality", className="mt-4 mb-4 text-center"),
 
-#       James's code
-"""    dcc.Tabs(id="tabs-example", children=[
+################################### JAMES'S CODE ###################################
+#    dcc.Tabs(id="tabs-example", children=[
 
-         # ------ Tab 1: Choropleth ------
-        dcc.Tab(label="Global Life Expectancy (Choropleth Map)", children=[
-            html.Br(),
-            html.P("Explore global life expectancy by selecting a year."),
-            dcc.Slider(
-                id="year-slider",
-                min=min(years),
-                max=max(years),
-                step=5,
-                value=2007,
-                marks={str(year): str(year) for year in years},
-            ),
-            dcc.Graph(id="choropleth-map", style={"height": "600px"}),
-            html.Br(),
-        ]),
+#          # ------ Tab 1: Choropleth ------
+#         dcc.Tab(label="Global Life Expectancy (Choropleth Map)", children=[
+#             html.Br(),
+#             html.P("Explore global life expectancy by selecting a year."),
+#             dcc.Slider(
+#                 id="year-slider",
+#                 min=min(years),
+#                 max=max(years),
+#                 step=5,
+#                 value=2007,
+#                 marks={str(year): str(year) for year in years},
+#             ),
+#             dcc.Graph(id="choropleth-map", style={"height": "600px"}),
+#             html.Br(),
+#         ]),
 
-        # ------ Tab 2: Interactive Charts ------
-        dcc.Tab(label="GDP & Life Expectancy Trends", children=[
-            html.Br(),
-            html.P("Filter by continent:"),
-            dcc.Dropdown(
-                id="continent-dropdown",
-                options=[{"label": c, "value": c} for c in continents],
-                value="Asia",
-                clearable=False,
-            ),
-            dbc.Row([
-                dbc.Col(dcc.Graph(id="life-expectancy-line"), width=6),
-                dbc.Col(dcc.Graph(id="gdp-bar-chart"), width=6),
-            ], className="mb-4"),
-        ]),
+#         # ------ Tab 2: Interactive Charts ------
+#         dcc.Tab(label="GDP & Life Expectancy Trends", children=[
+#             html.Br(),
+#             html.P("Filter by continent:"),
+#             dcc.Dropdown(
+#                 id="continent-dropdown",
+#                 options=[{"label": c, "value": c} for c in continents],
+#                 value="Asia",
+#                 clearable=False,
+#             ),
+#             dbc.Row([
+#                 dbc.Col(dcc.Graph(id="life-expectancy-line"), width=6),
+#                 dbc.Col(dcc.Graph(id="gdp-bar-chart"), width=6),
+#             ], className="mb-4"),
+#         ]),
 
-        # ------ Tab 3: Animated GDP Over Time ------
-        dcc.Tab(label="GDP Growth Over Time (Animated)", children=[
-            html.Br(),
-            html.P("Click Play to animate GDP per capita changes over time."),
-            dcc.Graph(id="animated-gdp"),
-        ]),
-    ]),
- """
+#         # ------ Tab 3: Animated GDP Over Time ------
+#         dcc.Tab(label="GDP Growth Over Time (Animated)", children=[
+#             html.Br(),
+#             html.P("Click Play to animate GDP per capita changes over time."),
+#             dcc.Graph(id="animated-gdp"),
+#         ]),
+#     ]),
+################################### END OF ###################################
+################################### My Code ###################################
+
 ], fluid=True)
-#       My Code
+
 
 
 # -----------------------------------------------------------
