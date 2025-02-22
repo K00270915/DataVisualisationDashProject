@@ -151,7 +151,7 @@ def updateSpeciesPYMap(selected_year):
         df_filtered,
         locations="Country.of.Origin",
         locationmode="country names", 
-        color="Sweetness"),
+        color="Sweetness",
         hover_name="Country.of.Origin",
         color_continuous_scale=px.colors.sequential.Plasma,
         projection="orthographic",
