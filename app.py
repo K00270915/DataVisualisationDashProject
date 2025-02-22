@@ -63,9 +63,9 @@ app.layout = dbc.Container([
     dcc.Tabs(id="tabs-example", children=[
 
         # TAB 1: Species of Coffee Used Throughout The Years
-        dcc.Tab(label="Species of Coffee Used Throughout The Years", children=[
+        dcc.Tab(label="The Sweetness of Coffee in different regions", children=[
             html.Br(),
-            html.P("Here is a visualisation on the usage of Arabica and Robusta throughout the years. Do you` notice anything?"),
+            html.P("Here is a visualisation on the sweetness of coffee in different regions throughout the years. Do you notice anything?"),
             
             dcc.Slider(
                 id="year-slider",
@@ -147,16 +147,15 @@ app.layout = dbc.Container([
 )
 def updateSpeciesPYMap(selected_year):
     df_filtered = df[df["Harvest.Year"].astype(int) == selected_year]
-    df_filtered["SpeciesCount"] = df_filtered.groupby("Country.of.Origin")["Species"].transform("count")
     fig = px.choropleth(
         df_filtered,
         locations="Country.of.Origin",
         locationmode="country names", 
-        color="SpeciesCount",
+        color="Sweetness".astype(int),
         hover_name="Country.of.Origin",
         color_continuous_scale=px.colors.sequential.Plasma,
         projection="orthographic",
-        title=f"Species of Coffee Used Throughout The Year ({selected_year})",
+        title=f"Sweetness of Coffee Throughout The Year ({selected_year})",
     )
     print(df_filtered[["Country.of.Origin", "Species"]])
     print(df["Harvest.Year"].unique())  # See available years
