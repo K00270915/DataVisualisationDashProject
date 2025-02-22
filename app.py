@@ -146,7 +146,7 @@ app.layout = dbc.Container([
     Input("year-slider", "value")
 )
 def updateSpeciesPYMap(selected_year):
-    df_filtered = df[df["Harvest.Year"] == selected_year].astype(int)
+    df_filtered = df[df["Harvest.Year"].astype(int) == selected_year]
     df_filtered["SpeciesCount"] = df_filtered.groupby("Country.of.Origin")["Species"].transform("count")
     fig = px.choropleth(
         df_filtered,
@@ -158,6 +158,9 @@ def updateSpeciesPYMap(selected_year):
         projection="orthographic",
         title=f"Species of Coffee Used Throughout The Year ({selected_year})",
     )
+    print(df_filtered[["Country.of.Origin", "Species"]])
+    print(df["Harvest.Year"].unique())  # See available years
+
     return fig
 ################################### END OF ###################################
 ################################### JAMES'S CALLBACKS ###################################
