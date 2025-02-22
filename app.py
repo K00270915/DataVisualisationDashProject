@@ -142,7 +142,7 @@ app.layout = dbc.Container([
 # Callback: Calback For Updating Coffee Type Map based on Year Selection
 
 @app.callback(
-    Output("speciesPYMap", "figure")
+    Output("speciesPYMap", "figure"),
     Input("year-slider", "value")
 )
 def updateSpeciesPYMap(selected_year):
@@ -150,11 +150,11 @@ def updateSpeciesPYMap(selected_year):
     fig = px.choropleth(
         df_filtered,
         locations="Country.of.Origin",
-        color="Species"
+        color="Species",
         hover_name="Country.of.Origin",
         color_continuous_scale=px.colors.sequential.Plasma,
         projection="orthographic",
-        title=f"Species of Coffee Used Throughout The Year ({selected_year})"
+        title=f"Species of Coffee Used Throughout The Year ({selected_year})",
         range_color=[0,90]
     )
     return fig
