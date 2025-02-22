@@ -146,16 +146,17 @@ app.layout = dbc.Container([
     Input("year-slider", "value")
 )
 def updateSpeciesPYMap(selected_year):
-    df_filtered = df[df["Harvest.Year"] == selected_year]
+    df_filtered = df[df["Harvest.Year"] == selected_year].astype(int)
+    df_filtered["SpeciesCount"] = df_filtered.groupby("Country.of.Origin")["Species"].transform("count")
     fig = px.choropleth(
         df_filtered,
         locations="Country.of.Origin",
-        color="Species",
+        locationmode="country names", 
+        color="SpeciesCount",
         hover_name="Country.of.Origin",
         color_continuous_scale=px.colors.sequential.Plasma,
         projection="orthographic",
         title=f"Species of Coffee Used Throughout The Year ({selected_year})",
-        range_color=[0,90]
     )
     return fig
 ################################### END OF ###################################
