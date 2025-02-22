@@ -65,7 +65,7 @@ app.layout = dbc.Container([
         # TAB 1: Species of Coffee Used Throughout The Years
         dcc.Tab(label="Species of Coffee Used Throughout The Years", children=[
             html.Br(),
-            html.P("Here is a visualisation on the usage of Arabica and Robusta throughout the years. Do notice anything?"),
+            html.P("Here is a visualisation on the usage of Arabica and Robusta throughout the years. Do you` notice anything?"),
             
             dcc.Slider(
                 id="year-slider",
@@ -137,7 +137,28 @@ app.layout = dbc.Container([
 # -----------------------------------------------------------
 # 4) Callbacks for Interactivity
 # -----------------------------------------------------------
+################################### MY CALLBACKS ###################################
 
+# Callback: Calback For Updating Coffee Type Map based on Year Selection
+
+@app.callback(
+    Output("speciesPYMap", "figure")
+    Input("year-slider", "value")
+)
+def updateSpeciesPYMap(selected_year):
+    df_filtered = df[df["Harvest.Year"] == selected_year]
+    fig = px.choropleth(
+        df_filtered,
+        locations="Country.of.Origin",
+        color="Species"
+        hover_name="Country.of.Origin",
+        color_continuous_scale=px.colors.sequential.Plasma,
+        projection="orthographic",
+        title=f"Species of Coffee Used Throughout The Year ({selected_year})"
+        range_color=[0,90]
+    )
+    return fig
+################################### END OF ###################################
 ################################### JAMES'S CALLBACKS ###################################
 # # Callback: Update Choropleth Map based on Year Selection
 # @app.callback(
