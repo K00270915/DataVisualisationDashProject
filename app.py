@@ -93,8 +93,6 @@ app.layout = dbc.Container([
                 html.Li("Category.Two.Defects: Refers to the total number of second-level defects, including more severe defects like moldy, insect-damaged, or perforated beans."),
                 html.Li("Rec_Cnt (Grouped by datasets only): Refers to the total record count for each of the respective location bins."),
             ]),
-            html.Br(),
-            html.H2("CONTEXT - Sweetness: Refers to the palate of sweetness offered by its taste."),
         ]),
 
         # TAB 2: Species of Coffee Used Throughout The Years
@@ -112,8 +110,8 @@ app.layout = dbc.Container([
             ),
 
             dcc.Graph(id="speciesPYMap", style={"height": "600px"}),
-
             html.Br(),
+            html.H2("CONTEXT - Sweetness: Refers to the palate of sweetness offered by its taste."),
         ])
     ])
 
