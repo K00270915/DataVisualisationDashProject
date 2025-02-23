@@ -63,7 +63,7 @@ app.layout = dbc.Container([
     dcc.Tabs(id="tabs-example", children=[
 
         # TAB 1: About The dataset
-        dcc.Tab(label="Data Visualisation Project: An Analysis on Coffee Quality", children=[
+        dcc.Tab(label="About Dataset", children=[
             html.Br(),
             html.P("Coffee quality can vary significantly based on its origin, processing methods, and environmental factors. By analysing coffee quality data from different regions, we can uncover patterns that highlight which countries or continents produce the highest-rated coffee, what factors contribute to better flavor and aroma, and how processing methods affect overall taste. This dataset provides valuable insights into aspects like acidity, sweetness, and body, allowing us to compare coffee quality across different origins. Through this analysis, we might discover trends such as whether Arabica or Robusta beans score higher on average, how moisture levels impact quality, or if certain defects are more common in specific regions. Understanding these factors can benefit coffee producers, roasters, and enthusiasts who want to learn more about what makes a great cup of coffee."),
             html.Br(),
@@ -180,8 +180,10 @@ app.layout = dbc.Container([
 )
 def updateSpeciesPYMap(selected_year):
     df_filtered = df[df["Harvest.Year"].astype(int) == selected_year]
+    df_avg = df_filtered.groupby("Country.of.Origin", as_index=False)["Sweetness"].mean()
+
     fig = px.choropleth(
-        df_filtered,
+        df_avg,
         locations="Country.of.Origin",
         locationmode="country names", 
         color="Sweetness",
@@ -190,8 +192,6 @@ def updateSpeciesPYMap(selected_year):
         projection="orthographic",
         title=f"Sweetness of Coffee Throughout The Year ({selected_year})",
     )
-    print(df_filtered[["Country.of.Origin", "Species"]])
-    print(df["Harvest.Year"].unique())  # See available years
 
     return fig
 ################################### END OF ###################################
