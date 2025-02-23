@@ -62,7 +62,40 @@ app.layout = dbc.Container([
 
     dcc.Tabs(id="tabs-example", children=[
 
-        # TAB 1: Species of Coffee Used Throughout The Years
+        # TAB 1: About The dataset
+        dcc.Tab(label="Data Visualisation Project: An Analysis on Coffee Quality", children=[
+            html.Br(),
+            html.P("Coffee quality can vary significantly based on its origin, processing methods, and environmental factors. By analysing coffee quality data from different regions, we can uncover patterns that highlight which countries or continents produce the highest-rated coffee, what factors contribute to better flavor and aroma, and how processing methods affect overall taste. This dataset provides valuable insights into aspects like acidity, sweetness, and body, allowing us to compare coffee quality across different origins. Through this analysis, we might discover trends such as whether Arabica or Robusta beans score higher on average, how moisture levels impact quality, or if certain defects are more common in specific regions. Understanding these factors can benefit coffee producers, roasters, and enthusiasts who want to learn more about what makes a great cup of coffee."),
+            html.Br(),
+            html.H2("Dataset Columns"),
+            html.Ul([
+                html.Li("REC_ID: Refers to the unique database ID"),
+                html.Li("Species: Refers to the botanical species of the coffee beans, such as Arabica or Robusta."),
+                html.Li("Continent.of.Origin: Refers to the continent of origin for the respective coffee lot record."),
+                html.Li("Country.of.Origin: Refers to the country of origin for the respective coffee lot record."),
+                html.Li("Harvest.Year: Refers to the year harvested for the respective coffee lot record."),
+                html.Li("Expiration: Refers to the assigned expiration date for the respective coffee lot record."),
+                html.Li("Variety: Refers to the specific cultivar or type of coffee plant from which the beans are harvested."),
+                html.Li("Color: Refers to the observed color of raw coffee beans. Typically blue, green, or mixed."),
+                html.Li("Processing.Method: Describes the method used to process the coffee beans after harvesting."),
+                html.Li("Aroma: Refers to the scent or fragrance of the coffee."),
+                html.Li("Flavor: Evaluated based on the taste, including any sweetness, bitterness, acidity, and other flavor notes."),
+                html.Li("Aftertaste: Refers to the lingering taste that remains in the mouth after swallowing the coffee."),
+                html.Li("Acidity: Refers to the brightness or liveliness of the taste."),
+                html.Li("Body: Refers to the thickness or viscosity of the coffee in the mouth."),
+                html.Li("Balance: Refers to how well the different flavor components of the coffee work together."),
+                html.Li("Uniformity: Refers to the consistency of the coffee from cup to cup."),
+                html.Li("Clean.Cup: Refers to a coffee that is free of any off-flavors or defects, such as sourness, mustiness, or staleness."),
+                html.Li("Sweetness: Refers to the palate of sweetness offered by its taste."),
+                html.Li("Moisture: Represents the moisture content of the coffee beans, typically measured as a percentage."),
+                html.Li("Quakers: Indicates the presence of quaker beans, which are unripe or defective beans that fail to roast properly."),
+                html.Li("Category.One.Defects: Refers to the total number of first-level defects, such as black or sour beans."),
+                html.Li("Category.Two.Defects: Refers to the total number of second-level defects, including more severe defects like moldy, insect-damaged, or perforated beans."),
+                html.Li("Rec_Cnt (Grouped by datasets only): Refers to the total record count for each of the respective location bins."),
+            ]),
+        ]),
+
+        # TAB 2: Species of Coffee Used Throughout The Years
         dcc.Tab(label="The Sweetness of Coffee in different regions", children=[
             html.Br(),
             html.P("Here is a visualisation on the sweetness of coffee in different regions throughout the years. Do you notice anything?"),
