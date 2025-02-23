@@ -191,6 +191,7 @@ def updateSpeciesPYMap(selected_year):
         color_continuous_scale=px.colors.sequential.Plasma,
         projection="orthographic",
         title=f"Sweetness of Coffee Throughout The Year ({selected_year})",
+        range_color=[0, 10]
     )
 
     return fig
