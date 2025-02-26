@@ -95,7 +95,7 @@ app.layout = dbc.Container([
                 dbc.Col(dcc.Graph(id="life-expectancy-line"), width=6),
                 dbc.Col(dcc.Graph(id="gdp-bar-chart"), width=6),
             ], className="mb-4"),
-        ])
+        ]),
 
         
 
