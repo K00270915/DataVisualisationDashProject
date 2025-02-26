@@ -82,9 +82,9 @@ app.layout = dbc.Container([
         ]),
 
         # TAB 2: The Species of Coffee Used In Different Regions and The Flavour per Continent
-        dcc.Tab(label="Coffee Species & Types", children=[
+        dcc.Tab(label="Coffee Varieties & Types", children=[
             html.Br(),
-            html.P("See the popularity of different coffee species and types throughout the years."),
+            html.P("See the popularity of different coffee varieties and types throughout the years."),
             dcc.Dropdown(
                 id="continent-dropdown",
                 options=[{"label": c, "value": c} for c in continent],
@@ -231,10 +231,10 @@ def update_charts(selected_continent):
     fig_life = px.line(
         df_species,
         x="Harvest.Year", y="Country.of.Origin", color="Variety",
-        title=f"Count of Countries Using Coffee Species in {selected_continent} Over Time",
+        title=f"Count of Countries Using a Coffee Variety in {selected_continent} Over Time",
         labels={"Country.of.Origin": "Number of Countries", "Harvest.Year": "Year"}
     )
-    fig_life.update_yaxes(range=[0, 10])  # Fixed y-axis range
+    fig_life.update_yaxes(range=[0, 6])  # Fixed y-axis range
     
     # Bar Chart: Avg Flavor Score by Country (for 2014)
     df_flavor = df_continent[df_continent["Harvest.Year"] == 2014]\
