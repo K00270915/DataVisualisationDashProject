@@ -45,7 +45,7 @@ df = df.dropna(axis=0, how='any')
 species = sorted(df["Species"].unique())
 continent = sorted(df["Continent.of.Origin"].unique())
 country = sorted(df["Country.of.Origin"].unique())
-years = sorted(int(year) for year in df["Harvest.Year"].unique())
+years = [2012, 2013, 2014, 2015, 2016, 2017]
 
 # -----------------------------------------------------------
 # 2) Create Dash App with Bootstrap Styling
@@ -62,7 +62,28 @@ app.layout = dbc.Container([
 
     dcc.Tabs(id="tabs-example", children=[
 
-        # TAB 1: About The dataset
+        # TAB 1: Species of Coffee Used Throughout The Years
+        dcc.Tab(label="The Sweetness of Coffee in different regions", children=[
+            html.Br(),
+            html.P("Here is a visualisation on the sweetness of coffee in different regions throughout the years. Do you notice anything?"),
+            
+            dcc.Slider(
+                id="year-slider",
+                min=min(years),
+                max=max(years),
+                step=1,
+                value=2011,
+                marks={str(year): str(year) for year in years},
+            ),
+
+            dcc.Graph(id="speciesPYMap", style={"height": "600px"}),
+            html.Br(),
+            html.H2("CONTEXT - Sweetness: Refers to the palate of sweetness offered by its taste."),
+        ]),
+
+        
+
+        # TAB 2: About The dataset
         dcc.Tab(label="About Dataset", children=[
             html.Br(),
             html.P("Coffee quality can vary significantly based on its origin, processing methods, and environmental factors. By analysing coffee quality data from different regions, we can uncover patterns that highlight which countries or continents produce the highest-rated coffee, what factors contribute to better flavor and aroma, and how processing methods affect overall taste. This dataset provides valuable insights into aspects like acidity, sweetness, and body, allowing us to compare coffee quality across different origins. Through this analysis, we might discover trends such as whether Arabica or Robusta beans score higher on average, how moisture levels impact quality, or if certain defects are more common in specific regions. Understanding these factors can benefit coffee producers, roasters, and enthusiasts who want to learn more about what makes a great cup of coffee."),
@@ -93,25 +114,6 @@ app.layout = dbc.Container([
                 html.Li("Category.Two.Defects: Refers to the total number of second-level defects, including more severe defects like moldy, insect-damaged, or perforated beans."),
                 html.Li("Rec_Cnt (Grouped by datasets only): Refers to the total record count for each of the respective location bins."),
             ]),
-        ]),
-
-        # TAB 2: Species of Coffee Used Throughout The Years
-        dcc.Tab(label="The Sweetness of Coffee in different regions", children=[
-            html.Br(),
-            html.P("Here is a visualisation on the sweetness of coffee in different regions throughout the years. Do you notice anything?"),
-            
-            dcc.Slider(
-                id="year-slider",
-                min=min(years),
-                max=max(years),
-                step=1,
-                value=2011,
-                marks={str(year): str(year) for year in years},
-            ),
-
-            dcc.Graph(id="speciesPYMap", style={"height": "600px"}),
-            html.Br(),
-            html.H2("CONTEXT - Sweetness: Refers to the palate of sweetness offered by its taste."),
         ])
     ])
 
