@@ -221,26 +221,34 @@ def updateSpeciesPYMap(selected_year):
     Input("continent-dropdown", "value")
 )
 def update_charts(selected_continent):
+    # Filter dataset by continent
     df_continent = df[df["Continent.of.Origin"] == selected_continent]
     
-    # Line Chart: Count of Unique Species Over the Years
-    df_species = df_continent.groupby("Harvest.Year")["Species"].nunique().reset_index()
-    fig_species = px.line(
-        df_species,
-        x="Harvest.Year", y="Species",
-        title=f"Unique Coffee Species in {selected_continent} Over Time"
-    )
+    # Line Chart: Coffee Species Trends (Count of Countries Using Each Species)
+    df_species = df_continent.groupby(["Harvest.Year", "Species"])\
+        ["Country.of.Origin"].nunique().reset_index()
     
-    # Bar Chart: Average Flavor Score per Country (Year 2014)
-    df_2014 = df_continent[df_continent["Harvest.Year"] == 2014]
-    df_flavor = df_2014.groupby("Country.of.Origin", as_index=False)["Flavor"].mean()
-    fig_flavor = px.bar(
+    fig_life = px.line(
+        df_species,
+        x="Harvest.Year", y="Country.of.Origin", color="Species",
+        title=f"Count of Countries Using Coffee Species in {selected_continent} Over Time",
+        labels={"Country.of.Origin": "Number of Countries", "Harvest.Year": "Year"}
+    )
+    fig_life.update_yaxes(range=[0, 10])  # Fixed y-axis range
+    
+    # Bar Chart: Avg Flavor Score by Country (for 2014)
+    df_flavor = df_continent[df_continent["Harvest.Year"] == 2014]\
+        .groupby("Country.of.Origin", as_index=False)["Flavor"].mean()
+    
+    fig_gdp = px.bar(
         df_flavor,
         x="Country.of.Origin", y="Flavor",
-        title=f"Average Flavor Score by Country in {selected_continent} (2014)"
+        title=f"Average Coffee Flavor Score by Country ({selected_continent}, 2014)",
+        labels={"Flavor": "Avg Flavor Score"}
     )
+    fig_gdp.update_yaxes(range=[0, 10])  # Fixed y-axis range
     
-    return fig_species, fig_flavor
+    return fig_life, fig_gdp
 ################################### END OF ###################################
 ################################### JAMES'S CALLBACKS ###################################
 # # Callback: Update Choropleth Map based on Year Selection
