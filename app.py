@@ -95,6 +95,10 @@ app.layout = dbc.Container([
                 dbc.Col(dcc.Graph(id="life-expectancy-line"), width=6),
                 dbc.Col(dcc.Graph(id="gdp-bar-chart"), width=6),
             ], className="mb-4"),
+            html.Br(),
+            html.H2("CONTEXT"),
+            html.P("Variety: Refers to the specific cultivar or type of coffee plant from which the beans are harvested."),
+            html.P("Flavor: Evaluated based on the taste, including any sweetness, bitterness, acidity, and other flavor notes."),
         ]),
 
         
@@ -231,7 +235,7 @@ def update_charts(selected_continent):
     fig_life = px.line(
         df_species,
         x="Harvest.Year", y="Country.of.Origin", color="Variety",
-        title=f"Count of Countries Using a Coffee Variety in {selected_continent} Over Time",
+        title=f"Countries Using a Coffee Variety in {selected_continent} Over Time",
         labels={"Country.of.Origin": "Number of Countries", "Harvest.Year": "Year"}
     )
     fig_life.update_yaxes(range=[0, 6])  # Fixed y-axis range
