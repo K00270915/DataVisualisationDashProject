@@ -92,8 +92,8 @@ app.layout = dbc.Container([
                 clearable=False,
             ),
             dbc.Row([
-                dbc.Col(dcc.Graph(id="life-expectancy-line"), width=6),
-                dbc.Col(dcc.Graph(id="gdp-bar-chart"), width=6),
+                dbc.Col(dcc.Graph(id="coffee-variety-line"), width=6),
+                dbc.Col(dcc.Graph(id="flavor-bar-chart"), width=6),
             ], className="mb-4"),
             html.Br(),
             html.H2("CONTEXT"),
@@ -102,7 +102,23 @@ app.layout = dbc.Container([
             html.P(id="country-count-text"),
         ]),
 
-        
+        # ------ Tab 3: Animated Coffee Qualities Over Time ------
+        dcc.Tab(label="Quality Of Coffee Over Time (Animated)", children=[
+            html.Br(),
+            html.P("Click Play to on the below graphs to see how the coffee quality fared in different countries over time."),
+            dcc.Graph(id="animated-cq-1"),
+            html.Br(),
+            dcc.Graph(id="animated-cq-2"),
+            html.Br(),
+            dcc.Graph(id="animated-cq-3"),
+            html.Br(),
+            html.H2("CONTEXT"),
+            html.P("Body:  Refers to the thickness or viscosity of the coffee in the mouth."),
+            html.P("Balance: Refers to how well the different flavor components of the coffee work together."),
+            html.P("Aroma: Refers to the scent or fragrance of the coffee."),
+            html.P("Acidity: Refers to the brightness or liveliness of the taste."),
+            
+        ]),
 
         # TAB ?: About The dataset
         dcc.Tab(label="About Dataset", children=[
@@ -208,7 +224,7 @@ def updateSpeciesPYMap(selected_year):
     fig = px.choropleth(
         df_avg,
         locations="Country.of.Origin",
-        locationmode="country names", 
+        locationmode="country names",
         color="Sweetness",
         hover_name="Country.of.Origin",
         color_continuous_scale=px.colors.sequential.Plasma,
@@ -221,8 +237,8 @@ def updateSpeciesPYMap(selected_year):
 
 # Callback: Update Line Chart & Bar Chart based on Continent Selection
 @app.callback(
-    [Output("life-expectancy-line", "figure"),
-     Output("gdp-bar-chart", "figure"),
+    [Output("coffee-variety-line", "figure"),
+     Output("flavor-bar-chart", "figure"),
      Output("country-count-text", "children")],
     Input("continent-dropdown", "value")
 )
@@ -234,13 +250,13 @@ def update_charts(selected_continent):
     df_species = df_continent.groupby(["Harvest.Year", "Variety"])\
         ["Country.of.Origin"].nunique().reset_index()
     
-    fig_life = px.line(
+    fig_variety = px.line(
         df_species,
         x="Harvest.Year", y="Country.of.Origin", color="Variety",
         title=f"Countries Using a Coffee Variety in {selected_continent} Over Time",
         labels={"Country.of.Origin": "Number of Countries", "Harvest.Year": "Year"}
     )
-    fig_life.update_yaxes(range=[0, 6])  # Fixed y-axis range
+    fig_variety.update_yaxes(range=[0, 6])  # Fixed y-axis range
     
     # Bar Chart: Avg Flavor Score by Country (for 2014)
     df_flavor = df_continent[df_continent["Harvest.Year"] == 2014]\
@@ -248,18 +264,71 @@ def update_charts(selected_continent):
     
     df_2014 = df_continent[df_continent["Harvest.Year"] == 2014]
     df_flavor = df_2014.groupby("Country.of.Origin", as_index=False)["Flavor"].mean()
-    fig_gdp = px.bar(
+    fig_flavour = px.bar(
         df_flavor,
         x="Country.of.Origin", y="Flavor",
         title=f"Avg Coffee Flavor Score by Country ({selected_continent}, 2014)",
     )
-    fig_gdp.update_yaxes(range=[0, 10])  # Adjust y-axis range as needed
+    fig_flavour.update_yaxes(range=[0, 10])  # Adjust y-axis range as needed
 
     # Count unique countries recorded in 2014
     num_countries = df_2014["Country.of.Origin"].nunique()
     paragraph_text = f"These values are based on the total of {num_countries} countries recorded in {selected_continent} in 2014."
 
-    return fig_life, fig_gdp, paragraph_text
+    return fig_variety, fig_flavour, paragraph_text
+
+    # Callback: Animated Scatter Plots for Coffee Qualities
+@app.callback(
+    Output("animated-cq-1", "figure"),
+    Output("animated-cq-2", "figure"),
+    Output("animated-cq-3", "figure"),
+    Input("tabs-example", "value")
+)
+def update_animated_chart(tab):
+    fig = px.scatter(
+        df,
+        x="Sweetness", y="Acidity",
+        size="Body", color="Country.Of.Origin",
+        hover_name="Country.Of.Origin",
+        animation_frame="Harvest.Year",
+        animation_group="Country.Of.Origin",
+        log_x=True,
+        size_max=55,
+        title="Coffee Sweetness vs. Acidity Over Time",
+        range_x=[0, 10],
+        range_y=[5, 9]
+    )
+
+    fig_2 = px.scatter(
+        df,
+        x="Aroma", y="Flavor",
+        size="Acidity", color="Country.Of.Origin",
+        hover_name="Country.Of.Origin",
+        animation_frame="Harvest.Year",
+        animation_group="Country.Of.Origin",
+        log_x=True,
+        size_max=55,
+        title="Coffee Aroma vs. Flavor Over Time",
+        range_x=[5, 9],
+        range_y=[5, 9]
+    )
+
+    fig_3 = px.scatter(
+        df,
+        x="Body", y="Balance",
+        size="Sweetness", color="Country.Of.Origin",
+        hover_name="Country.Of.Origin",
+        animation_frame="Harvest.Year",
+        animation_group="Country.Of.Origin",
+        log_x=True,
+        size_max=55,
+        title="Coffee Thickness vs. Blend Over Time",
+        range_x=[5, 9],
+        range_y=[5, 9]
+    )
+    return fig, fig_2, fig_3
+
+
 ################################### END OF ###################################
 ################################### JAMES'S CALLBACKS ###################################
 # # Callback: Update Choropleth Map based on Year Selection
