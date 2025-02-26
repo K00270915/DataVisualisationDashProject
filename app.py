@@ -62,7 +62,7 @@ app.layout = dbc.Container([
 
     dcc.Tabs(id="tabs-example", children=[
 
-        # TAB 1: Species of Coffee Used Throughout The Years
+        # TAB 1: The Sweetness Of Throughout The Years
         dcc.Tab(label="The Sweetness of Coffee in different regions", children=[
             html.Br(),
             html.P("Here is a visualisation on the sweetness of coffee in different regions throughout the years. Do you notice anything?"),
@@ -81,9 +81,25 @@ app.layout = dbc.Container([
             html.H2("CONTEXT - Sweetness: Refers to the palate of sweetness offered by its taste."),
         ]),
 
+        # TAB 2: The Species of Coffee Used In Different Regions and The Flavour per Continent
+        dcc.Tab(label="Coffee Species & Types", children=[
+            html.Br(),
+            html.P("See the popularity of different coffee species and types throughout the years."),
+            dcc.Dropdown(
+                id="continent-dropdown",
+                options=[{"label": c, "value": c} for c in continent],
+                value="Africa",
+                clearable=False,
+            ),
+            dbc.Row([
+                dbc.Col(dcc.Graph(id="life-expectancy-line"), width=6),
+                dbc.Col(dcc.Graph(id="gdp-bar-chart"), width=6),
+            ], className="mb-4"),
+        ])
+
         
 
-        # TAB 2: About The dataset
+        # TAB ?: About The dataset
         dcc.Tab(label="About Dataset", children=[
             html.Br(),
             html.P("Coffee quality can vary significantly based on its origin, processing methods, and environmental factors. By analysing coffee quality data from different regions, we can uncover patterns that highlight which countries or continents produce the highest-rated coffee, what factors contribute to better flavor and aroma, and how processing methods affect overall taste. This dataset provides valuable insights into aspects like acidity, sweetness, and body, allowing us to compare coffee quality across different origins. Through this analysis, we might discover trends such as whether Arabica or Robusta beans score higher on average, how moisture levels impact quality, or if certain defects are more common in specific regions. Understanding these factors can benefit coffee producers, roasters, and enthusiasts who want to learn more about what makes a great cup of coffee."),
@@ -197,6 +213,34 @@ def updateSpeciesPYMap(selected_year):
     )
 
     return fig
+
+# Callback: Update Line Chart & Bar Chart based on Continent Selection
+@app.callback(
+    [Output("life-expectancy-line", "figure"),
+     Output("gdp-bar-chart", "figure")],
+    Input("continent-dropdown", "value")
+)
+def update_charts(selected_continent):
+    df_continent = df[df["Continent.of.Origin"] == selected_continent]
+    
+    # Line Chart: Count of Unique Species Over the Years
+    df_species = df_continent.groupby("Harvest.Year")["Species"].nunique().reset_index()
+    fig_species = px.line(
+        df_species,
+        x="Harvest.Year", y="Species",
+        title=f"Unique Coffee Species in {selected_continent} Over Time"
+    )
+    
+    # Bar Chart: Average Flavor Score per Country (Year 2014)
+    df_2014 = df_continent[df_continent["Harvest.Year"] == 2014]
+    df_flavor = df_2014.groupby("Country.of.Origin", as_index=False)["Flavor"].mean()
+    fig_flavor = px.bar(
+        df_flavor,
+        x="Country.of.Origin", y="Flavor",
+        title=f"Average Flavor Score by Country in {selected_continent} (2014)"
+    )
+    
+    return fig_species, fig_flavor
 ################################### END OF ###################################
 ################################### JAMES'S CALLBACKS ###################################
 # # Callback: Update Choropleth Map based on Year Selection
