@@ -225,12 +225,12 @@ def update_charts(selected_continent):
     df_continent = df[df["Continent.of.Origin"] == selected_continent]
     
     # Line Chart: Coffee Species Trends (Count of Countries Using Each Species)
-    df_species = df_continent.groupby(["Harvest.Year", "Species"])\
+    df_species = df_continent.groupby(["Harvest.Year", "Variety"])\
         ["Country.of.Origin"].nunique().reset_index()
     
     fig_life = px.line(
         df_species,
-        x="Harvest.Year", y="Country.of.Origin", color="Species",
+        x="Harvest.Year", y="Country.of.Origin", color="Variety",
         title=f"Count of Countries Using Coffee Species in {selected_continent} Over Time",
         labels={"Country.of.Origin": "Number of Countries", "Harvest.Year": "Year"}
     )
