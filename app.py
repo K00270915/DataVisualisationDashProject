@@ -42,6 +42,8 @@ df = pd.read_csv("data/Coffee_Qlty.csv")
 
 df = df.dropna(axis=0, how='any')
 
+# Throughout the code, you will see that 'Harvest.Year' was converted to an integer as the original values in the dataset were floats.
+
 species = sorted(df["Species"].unique())
 continent = sorted(df["Continent.of.Origin"].unique())
 country = sorted(df["Country.of.Origin"].unique())
@@ -120,7 +122,7 @@ app.layout = dbc.Container([
             
         ]),
 
-        # TAB ?: About The dataset
+        # TAB 5: About The dataset
         dcc.Tab(label="About Dataset", children=[
             html.Br(),
             html.P("Coffee quality can vary significantly based on its origin, processing methods, and environmental factors. By analysing coffee quality data from different regions, we can uncover patterns that highlight which countries or continents produce the highest-rated coffee, what factors contribute to better flavor and aroma, and how processing methods affect overall taste. This dataset provides valuable insights into aspects like acidity, sweetness, and body, allowing us to compare coffee quality across different origins. Through this analysis, we might discover trends such as whether Arabica or Robusta beans score higher on average, how moisture levels impact quality, or if certain defects are more common in specific regions. Understanding these factors can benefit coffee producers, roasters, and enthusiasts who want to learn more about what makes a great cup of coffee."),
@@ -154,64 +156,11 @@ app.layout = dbc.Container([
         ])
     ])
 
-
-
-################################### END OF ###################################
-################################### JAMES'S CODE ###################################
-#    dcc.Tabs(id="tabs-example", children=[
-
-#          # ------ Tab 1: Choropleth ------
-#         dcc.Tab(label="Global Life Expectancy (Choropleth Map)", children=[
-#             html.Br(),
-#             html.P("Explore global life expectancy by selecting a year."),
-#             dcc.Slider(
-#                 id="year-slider",
-#                 min=min(years),
-#                 max=max(years),
-#                 step=5,
-#                 value=2007,
-#                 marks={str(year): str(year) for year in years},
-#             ),
-#             dcc.Graph(id="choropleth-map", style={"height": "600px"}),
-#             html.Br(),
-#         ]),
-
-#         # ------ Tab 2: Interactive Charts ------
-#         dcc.Tab(label="GDP & Life Expectancy Trends", children=[
-#             html.Br(),
-#             html.P("Filter by continent:"),
-#             dcc.Dropdown(
-#                 id="continent-dropdown",
-#                 options=[{"label": c, "value": c} for c in continents],
-#                 value="Asia",
-#                 clearable=False,
-#             ),
-#             dbc.Row([
-#                 dbc.Col(dcc.Graph(id="life-expectancy-line"), width=6),
-#                 dbc.Col(dcc.Graph(id="gdp-bar-chart"), width=6),
-#             ], className="mb-4"),
-#         ]),
-
-#         # ------ Tab 3: Animated GDP Over Time ------
-#         dcc.Tab(label="GDP Growth Over Time (Animated)", children=[
-#             html.Br(),
-#             html.P("Click Play to animate GDP per capita changes over time."),
-#             dcc.Graph(id="animated-gdp"),
-#         ]),
-#     ]),
-################################### END OF ###################################
-
-
 ], fluid=True)
-
-
 
 # -----------------------------------------------------------
 # 4) Callbacks for Interactivity
 # -----------------------------------------------------------
-################################### MY CALLBACKS ###################################
-
-# Callback: Calback For Updating Coffee Type Map based on Year Selection
 
 @app.callback(
     Output("speciesPYMap", "figure"),
@@ -243,10 +192,8 @@ def updateSpeciesPYMap(selected_year):
     Input("continent-dropdown", "value")
 )
 def update_charts(selected_continent):
-    # Filter dataset by continent
     df_continent = df[df["Continent.of.Origin"] == selected_continent]
     
-    # Line Chart: Coffee Species Trends (Count of Countries Using Each Species)
     df_species = df_continent.groupby(["Harvest.Year", "Variety"])\
         ["Country.of.Origin"].nunique().reset_index()
     
@@ -256,9 +203,8 @@ def update_charts(selected_continent):
         title=f"Countries Using a Coffee Variety in {selected_continent} Over Time",
         labels={"Country.of.Origin": "Number of Countries", "Harvest.Year": "Year"}
     )
-    fig_variety.update_yaxes(range=[0, 6])  # Fixed y-axis range
+    fig_variety.update_yaxes(range=[0, 6])
     
-    # Bar Chart: Avg Flavor Score by Country (for 2014)
     df_flavor = df_continent[df_continent["Harvest.Year"] == 2014]\
         .groupby("Country.of.Origin", as_index=False)["Flavor"].mean()
     
@@ -269,9 +215,8 @@ def update_charts(selected_continent):
         x="Country.of.Origin", y="Flavor",
         title=f"Avg Coffee Flavor Score by Country ({selected_continent}, 2014)",
     )
-    fig_flavour.update_yaxes(range=[0, 10])  # Adjust y-axis range as needed
+    fig_flavour.update_yaxes(range=[0, 10])
 
-    # Count unique countries recorded in 2014
     num_countries = df_2014["Country.of.Origin"].nunique()
     paragraph_text = f"These values are based on the total of {num_countries} countries recorded in {selected_continent} in 2014."
 
@@ -325,81 +270,4 @@ def update_animated_chart(tab):
     )
     return fig, fig_2, fig_3
 
-
-################################### END OF ###################################
-################################### JAMES'S CALLBACKS ###################################
-# # Callback: Update Choropleth Map based on Year Selection
-# @app.callback(
-#     Output("choropleth-map", "figure"),
-#     Input("year-slider", "value")
-# )
-# def update_choropleth(selected_year):
-#     df_filtered = gapminder[gapminder["year"] == selected_year]
-#     fig = px.choropleth(
-#         df_filtered,
-#         locations="iso_alpha",
-#         color="lifeExp",
-#         hover_name="country",
-#         color_continuous_scale=px.colors.sequential.Plasma,
-#         projection="orthographic",
-#         title=f"Life Expectancy by Country ({selected_year})",
-#         # Set the range from 0 to 90 so the color scale remains constant
-#         range_color=[0, 90]
-#     )
-#     return fig
-
-
-# # Callback: Update Line Chart & Bar Chart based on Continent Selection
-# @app.callback(
-#     [Output("life-expectancy-line", "figure"),
-#      Output("gdp-bar-chart", "figure")],
-#     Input("continent-dropdown", "value")
-# )
-# def update_charts(selected_continent):
-#     # Line Chart: Life Expectancy Trends
-#     df_continent = gapminder[gapminder["continent"] == selected_continent]
-#     df_life = df_continent.groupby("year", as_index=False)["lifeExp"].mean()
-#     fig_life = px.line(
-#         df_life,
-#         x="year", y="lifeExp",
-#         title=f"Avg Life Expectancy in {selected_continent} Over Time"
-#     )
-
-#     # Bar Chart: Avg GDP per Country (Latest Year in Dataset)
-#     df_gdp = df_continent[df_continent["year"] == 2007]
-#     fig_gdp = px.bar(
-#         df_gdp,
-#         x="country", y="gdpPercap",
-#         title=f"GDP Per Capita by Country ({selected_continent}, 2007)"
-#     )
-
-#     return fig_life, fig_gdp
-
-
-# # Callback: Animated Scatter Plot for GDP Growth
-# @app.callback(
-#     Output("animated-gdp", "figure"),
-#     Input("tabs-example", "value")
-# )
-# def update_animated_chart(tab):
-#     fig = px.scatter(
-#         gapminder,
-#         x="gdpPercap", y="lifeExp",
-#         size="pop", color="continent",
-#         hover_name="country",
-#         animation_frame="year",
-#         animation_group="country",
-#         log_x=True,
-#         size_max=55,
-#         title="GDP per Capita vs. Life Expectancy Over Time",
-#         # Extend lifeExp axis to 100
-#         range_y=[0, 100]
-#     )
-#     return fig
-################################### END OF ###################################
-# -----------------------------------------------------------
-# 5) Run Server
-# -----------------------------------------------------------
-#if __name__ == "__main__":
-#    app.run_server(debug=True)
-server = app.server  # Expose the Flask app for WSGI
+server = app.server 
