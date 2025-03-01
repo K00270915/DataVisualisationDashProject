@@ -236,12 +236,16 @@ def update_charts(selected_continent):
     Input("tabs-example", "value")
 )
 def update_animated_chart(tab):
+    
+    df["Harvest.Year"] = df["Harvest.Year"].astype(int)
+    df = df.sort_values("Harvest.Year")
+
     fig = px.scatter(
         df,
         x="Sweetness", y="Acidity",
         size="Body", color="Country.of.Origin",
         hover_name="Country.of.Origin",
-        animation_frame="Harvest.Year".astype(int).sort_values(),
+        animation_frame="Harvest.Year",
         animation_group="Country.of.Origin",
         size_max=55,
         title="Coffee Sweetness vs. Acidity Over Time",
@@ -254,7 +258,7 @@ def update_animated_chart(tab):
         x="Aroma", y="Flavor",
         size="Acidity", color="Country.of.Origin",
         hover_name="Country.of.Origin",
-        animation_frame="Harvest.Year".astype(int).sort_values(),
+        animation_frame="Harvest.Year",
         animation_group="Country.of.Origin",
         size_max=55,
         title="Coffee Aroma vs. Flavor Over Time",
@@ -267,7 +271,7 @@ def update_animated_chart(tab):
         x="Body", y="Balance",
         size="Sweetness", color="Country.of.Origin",
         hover_name="Country.of.Origin",
-        animation_frame="Harvest.Year".astype(int).sort_values(),
+        animation_frame="Harvest.Year",
         animation_group="Country.of.Origin",
         size_max=55,
         title="Coffee Thickness vs. Blend Over Time",
