@@ -43,10 +43,8 @@ df = pd.read_csv("data/Coffee_Qlty.csv")
 df = df.dropna(axis=0, how='any')
 
 # Throughout the code, you will see that 'Harvest.Year' was converted to an integer as the original values in the dataset were floats.
-df["Harvest.Year"] = df["Harvest.Year"].astype(int)
+# df["Harvest.Year"] = df["Harvest.Year"].astype(int)
 df = df.sort_values("Harvest.Year")
-df.fillna(method="ffill", inplace=True) 
-df.fillna(method="bfill", inplace=True) 
 
 
 species = sorted(df["Species"].unique())
