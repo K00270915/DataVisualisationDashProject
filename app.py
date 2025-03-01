@@ -56,8 +56,7 @@ years = [2012, 2013, 2014, 2015, 2016, 2017]
 # 2) Create Dash App with Bootstrap Styling
 # -----------------------------------------------------------
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.LUX])
-server = app.server  # Expose Flask app for deployment
-
+server = app.server 
 # -----------------------------------------------------------
 # 3) Layout and Components
 # -----------------------------------------------------------
