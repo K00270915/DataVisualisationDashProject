@@ -299,15 +299,15 @@ def update_animated_chart(tab):
     Input('tabs-example', 'value')
 )
 def update_processing_method_graph(tab):
-    method_avg = df.groupby("Processing.Method")[["Sweetness", "Acidity"]].mean().reset_index()
+    method_avg = df.groupby("Processing.Method")[["Sweetness", "Acidity", "Aroma", "Flavor", "Body", "Balance"]].mean().reset_index()
     fig = px.bar(
         method_avg,
         x="Processing.Method",
-        y=["Sweetness", "Acidity"],
+        y=["Sweetness", "Acidity", "Aroma", "Flavor", "Body", "Balance"],
         barmode="group",
-        title="Average Sweetness & Acidity by Processing Method",
+        title="Average Coffee Factors by Processing Method",
         labels={"value": "Score", "variable": "Attribute"},
-        color_discrete_map={"Sweetness": "blue", "Acidity": "red"}
+        color_discrete_sequence=px.colors.qualitative.Set1
     )
     return fig
 
