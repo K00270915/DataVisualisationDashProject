@@ -74,13 +74,15 @@ app.layout = dbc.Container([
                 min=min(years),
                 max=max(years),
                 step=1,
-                value=2011,
+                value=2012,
                 marks={str(year): str(year) for year in years},
             ),
 
             dcc.Graph(id="speciesPYMap", style={"height": "600px"}),
             html.Br(),
             html.H2("CONTEXT - Sweetness: Refers to the palate of sweetness offered by its taste."),
+            html.Br(),
+            html.P("OBSERVATION: From looking at this chloropleth map, we can see that South America and Africa generally have higher sweetness levels compared to the other continents. This could be due to the type of coffee species grown in these regions or the processing methods used. To be more country specific, Brazil has consistently high scores across years, which aligns with its reputation as one of the largest and most reliable coffee producers. Overall, however sweetness scores are generally high with the lowest recorded sweetness scores still being relatively high, never dropping below 7.8 (India, 2015). So next questions would be, what factors contribute to the sweetness of coffee and how can one maintain or improve these scores?"),
         ]),
 
         # TAB 2: The Species of Coffee Used In Different Regions and The Flavour per Continent
@@ -102,6 +104,9 @@ app.layout = dbc.Container([
             html.P("Variety: Refers to the specific cultivar or type of coffee plant from which the beans are harvested."),
             html.P("Flavor: Evaluated based on the taste, including any sweetness, bitterness, acidity, and other flavor notes."),
             html.P(id="country-count-text"),
+            html.Br(),
+            html.P("OBSERVATION: With the line chart, we can see the most popular coffee varieties used per continent over the years (Africa: Bourbon / Gesha, Asia: Catimor / Java / undocumented, North America: Caturra / Catuai, South America: Caturra. From what we see in the chloropleth map in the first tab, we can presume that Caturra and Bourbon may be key contributors to the sweetness of coffee in South America and Africa."),
+            html.P("The bar chart - representing the year with the most countries recorded in the dataset - further give more context to the flavours of these popular coffee varieties. Africa's average flavour score is the highest, followed by South America, Asia, and North America. Africa's lead is Ethiopia with a flavor score of 8.5 which gives a helpful description of Bourbon having a great blend of sweetness, bitterness, acidity, and other flavor notes. Fluctuations in the flavor scores do not differ significantly between continents, which insinuates that although the sweetness of coffee may vary, the overall flavor of the coffee remains consistent and wouldn't be a deciding factor on what makes coffee a good coffee. So what does?....."),
         ]),
 
         # ------ Tab 3: Animated Coffee Qualities Over Time ------
@@ -119,7 +124,8 @@ app.layout = dbc.Container([
             html.P("Balance: Refers to how well the different flavor components of the coffee work together."),
             html.P("Aroma: Refers to the scent or fragrance of the coffee."),
             html.P("Acidity: Refers to the brightness or liveliness of the taste."),
-            
+            html.Br(),
+            html.P("OBSERVATION: With coffee sweetness vs acidity over time, we don't see much changes throughout the years apart from Brazil showing a slight increase in sweetness and acidity in 2016, however there seems to be a slight relationship between sweetness and acidicity with coffee getting sweeter as it gets more acidic. The coffee aroma vs flavor over time shows some countries like Guatemala and Mexico actually regressing in the coffee aroma which also displays a reduction in flavor as well, there for the opposite is true: The stronger the aroma for the coffee, the stronger its flavor. In our final animated chart we can see coffee thickness vs blend over time, with countries like Ethiopia and Nicaragua showing a decrease in thickness and balance over time. This could be due to the processing methods used in these countries."),
         ]),
 
         # TAB 5: About The dataset
@@ -235,7 +241,7 @@ def update_animated_chart(tab):
         x="Sweetness", y="Acidity",
         size="Body", color="Country.of.Origin",
         hover_name="Country.of.Origin",
-        animation_frame="Harvest.Year",
+        animation_frame=years,
         animation_group="Country.of.Origin",
         size_max=55,
         title="Coffee Sweetness vs. Acidity Over Time",
@@ -248,7 +254,7 @@ def update_animated_chart(tab):
         x="Aroma", y="Flavor",
         size="Acidity", color="Country.of.Origin",
         hover_name="Country.of.Origin",
-        animation_frame="Harvest.Year",
+        animation_frame=years,
         animation_group="Country.of.Origin",
         size_max=55,
         title="Coffee Aroma vs. Flavor Over Time",
@@ -261,7 +267,7 @@ def update_animated_chart(tab):
         x="Body", y="Balance",
         size="Sweetness", color="Country.of.Origin",
         hover_name="Country.of.Origin",
-        animation_frame="Harvest.Year",
+        animation_frame=years,
         animation_group="Country.of.Origin",
         size_max=55,
         title="Coffee Thickness vs. Blend Over Time",
