@@ -307,7 +307,7 @@ def update_processing_method_graph(tab):
         barmode="group",
         title="Average Coffee Factors by Processing Method",
         labels={"value": "Score", "variable": "Attribute"},
-        color_discrete_sequence=px.colors.qualitative.Set1
+        color_discrete_sequence=px.colors.qualitative.Pastel
     )
     return fig
 
