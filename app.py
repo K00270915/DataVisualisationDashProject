@@ -141,6 +141,8 @@ app.layout = dbc.Container([
             html.Br(),
             html.P("Obverve the processing methods used in different regions throughout the years."),
             dcc.Graph(id='processing-method-graph'),
+            html.P("OBSERVATION: From what we can see, processing methods don't seem to have a significant impact on the taste of the coffee, however there are slightly noticeable differences between methods. For example, The 'Pulped natural / honey' and ' Semi-washed / Semi-pulped' methods seem to have a a better average score on the coffee taste attributes compared to the other methods. This could be due to the fact that these methods are more environmentally friendly and sustainable, which could lead to better quality coffee. The 'Washed / Wet' method is the most popular method used in the dataset, but it doesn't seem to have a significant impact on the taste of the coffee. This could be due to the fact that this method is more common and less unique compared to the other methods. The 'Pulped natural / honey' method is the least popular method used in the dataset, but it seems to have a better average score on the coffee taste attributes compared to the other methods. This could be due to the fact that this method is more unique and less common compared to the other methods (Considered a premium processing method)."),
+            
         ]),
 
         
@@ -302,7 +304,7 @@ def update_processing_method_graph(tab):
     method_avg = df.groupby("Processing.Method")[["Sweetness", "Acidity", "Aroma", "Flavor", "Body", "Balance"]].mean().reset_index()
     fig = px.bar(
         method_avg,
-        x="Processing.Method",
+        x="Processing Method",
         y=["Sweetness", "Acidity", "Aroma", "Flavor", "Body", "Balance"],
         barmode="group",
         title="Average Coffee Factors by Processing Method",
