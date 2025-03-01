@@ -136,6 +136,14 @@ app.layout = dbc.Container([
             html.P("Processing method seems to be a deciding factor in influencing the flavor of coffee. But which one is the best?"),
         ]),
 
+        # ------ Tab 4: Processing Methods ------
+         dcc.Tab(label="Processing Methods", children=[
+            html.Br(),
+            html.P("Obverve the processing methods used in different regions throughout the years."),
+            dcc.Graph(id='processing-method-graph'),
+        ]),
+
+        
         # TAB 5: About The dataset
         dcc.Tab(label="About Dataset", children=[
             html.Br(),
@@ -284,5 +292,27 @@ def update_animated_chart(tab):
         range_y=[5, 9]
     )
     return fig, fig_2, fig_3
+
+# Callback: Processing Methods Bar chart
+@app.callback(
+    Output('processing-method-graph', 'figure'),
+    Input('tabs-example', 'value')
+)
+def update_processing_method_graph(tab):
+    if tab == 'processing-method':
+        method_avg = df.groupby("Processing.Method")[["Sweetness", "Acidity"]].mean().reset_index()
+
+        fig = px.bar(
+            method_avg,
+            x="Processing.Method",
+            y=["Sweetness", "Acidity"],
+            barmode="group",
+            title="Average Sweetness & Acidity by Processing Method",
+            labels={"value": "Score", "variable": "Attribute"},
+            color_discrete_map={"Sweetness": "blue", "Acidity": "red"}
+        )
+        return fig
+    return {}
+
 
 server = app.server 
