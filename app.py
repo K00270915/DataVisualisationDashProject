@@ -304,7 +304,7 @@ def update_processing_method_graph(tab):
     method_avg = df.groupby("Processing.Method")[["Sweetness", "Acidity", "Aroma", "Flavor", "Body", "Balance"]].mean().reset_index()
     fig = px.bar(
         method_avg,
-        x="Processing Method",
+        x="Processing.Method",
         y=["Sweetness", "Acidity", "Aroma", "Flavor", "Body", "Balance"],
         barmode="group",
         title="Average Coffee Factors by Processing Method",
