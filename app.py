@@ -43,8 +43,8 @@ df = pd.read_csv("data/Coffee_Qlty.csv")
 df = df.dropna(axis=0, how='any')
 
 # Throughout the code, you will see that 'Harvest.Year' was converted to an integer as the original values in the dataset were floats.
-# df["Harvest.Year"] = df["Harvest.Year"].astype(int)
-df = df.sort_values(by=["Harvest.Year", "Country.of.Origin"], ascending=[True, True])
+df["Harvest.Year"] = df["Harvest.Year"].astype(int)
+df = df.sort_values("Harvest.Year")
 
 
 species = sorted(df["Species"].unique())
@@ -128,7 +128,12 @@ app.layout = dbc.Container([
             html.P("Aroma: Refers to the scent or fragrance of the coffee."),
             html.P("Acidity: Refers to the brightness or liveliness of the taste."),
             html.Br(),
-            html.P("OBSERVATION: With coffee sweetness vs acidity over time, we don't see much changes throughout the years apart from Brazil showing a slight increase in sweetness and acidity in 2016, however there seems to be a slight relationship between sweetness and acidicity with coffee getting sweeter as it gets more acidic. The coffee aroma vs flavor over time shows some countries like Guatemala and Mexico actually regressing in the coffee aroma which also displays a reduction in flavor as well, there for the opposite is true: The stronger the aroma for the coffee, the stronger its flavor. In our final animated chart we can see coffee thickness vs blend over time, with countries like Ethiopia and Nicaragua showing a decrease in thickness and balance over time. This could be due to the processing methods used in these countries."),
+            html.P("FYI: DUE TO INCONSISTENCIES WITHIN THE DATASET, ONLY FOUR COUNTRIES ARE DISPLAYED FOR THE ANIMATED GRAPH."),
+            html.Br(),
+            html.P("OBSERVATION: With coffee sweetness vs acidity over time, we can see that there seems to be a trend of countries having a rising value of coffee acidity over the years but slowly reducing back in more recent years. The sweetness value stays the same. This suggest may other external factors may be at play for example increased rainfall or cooler temperatures (which does have an effect on coffee acidity levels) or other processing methods were introduced then refined. Brazil is an interesting outlier however as there is a period in time where the general sweetness of the coffee goes down then back up over the years, all the while the acidity levels continuously rise. Natural / Dry becomes a more popular processing method in Brazil after 2014 in the dataset, so this may allude as to how they solved the drop in sweetness in 2014."),
+            html.P("Coffee flavor vs aroma over time tells less of a story and does not exactly show any trend or pattern over the years other than the aroma and flavor values consitently changing over the years. Aroma values float arounf 7.5 over the years and flavor vlaues stay around the 8 mark meaning despite changes in other aspects of coffee over the years, this hasn't had much effect on the coffee flavor or aroma."),
+            html.P("Thickness vs blend over time is a bit interesting as the countries tend to be grouped pretty closely throughout the years in terms of value fluctiations. There was a rise in the the thickness of coffee over the years, especially in the United States in 2012 /2013. Colombia in terms of balancing the flavor comonents of the coffee shoots up in value after 2016. Looking at the other diagrams in the dashboard and seeing a consistecy in the sweetness of coffee and species of coffee used, another factor that could have influenced the coffee balance positively strong points to the processing methood used in recent times."),
+            html.P("Processing method seems to be a deciding factor in influencing the flavor of coffee. But which one is the best?"),
         ]),
 
         # TAB 5: About The dataset
